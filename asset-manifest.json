@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/kepler-logistics-demo/static/js/main.ca2b1b96.js",
+    "main.js": "/kepler-logistics-demo/static/js/main.4522561a.js",
     "static/media/parquet_wasm_bg.wasm": "/kepler-logistics-demo/static/media/parquet_wasm_bg.7f52ab37fe2e6735071c.wasm",
     "index.html": "/kepler-logistics-demo/index.html",
-    "main.ca2b1b96.js.map": "/kepler-logistics-demo/static/js/main.ca2b1b96.js.map"
+    "main.4522561a.js.map": "/kepler-logistics-demo/static/js/main.4522561a.js.map"
   },
   "entrypoints": [
-    "static/js/main.ca2b1b96.js"
+    "static/js/main.4522561a.js"
   ]
 }
