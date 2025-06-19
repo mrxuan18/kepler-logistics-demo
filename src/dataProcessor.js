@@ -29,19 +29,23 @@ const parseCSV = (csvText) => {
   const headers = parseCSVLine(lines[0]);
   console.log('CSV 字段:', headers.slice(0, 10), '...(共', headers.length, '个字段)');
   
-  const data = [];
-  for (let i = 1; i < lines.length; i++) {
+    const data = [];
+    let rowCount = 0;
+    const maxRows = 200; // 限制只读取200行数据
+
+    for (let i = 1; i < lines.length && rowCount < maxRows; i++) {
     if (lines[i].trim()) {
-      const values = parseCSVLine(lines[i]);
-      if (values.length >= headers.length - 5) { // 允许少量字段缺失
+        const values = parseCSVLine(lines[i]);
+        if (values.length >= headers.length - 5) { // 允许少量字段缺失
         const row = {};
         headers.forEach((header, index) => {
-          row[header] = values[index] || '';
+            row[header] = values[index] || '';
         });
         data.push(row);
+        rowCount++; // 增加计数器
+        }
       }
     }
-  }
   
   console.log(`CSV 解析完成: ${data.length} 行数据`);
   return data;
@@ -72,7 +76,7 @@ const parseCSVLine = (line) => {
 
 // 主数据处理函数
 export const processLogisticsData = async (rawData, progressCallback) => {
-  console.log('🚀 开始处理物流数据...');
+  console.log(' 开始处理物流数据...');
   
   // 1. 数据验证和清理
   const validData = rawData.filter(row => {
@@ -83,7 +87,7 @@ export const processLogisticsData = async (rawData, progressCallback) => {
     return hasShipperZip && hasShiptoZip && differentLocations;
   });
   
-  console.log(`✅ 数据验证完成: ${validData.length}/${rawData.length} 条有效数据`);
+  console.log(` 数据验证完成: ${validData.length}/${rawData.length} 条有效数据`);
   
   if (validData.length === 0) {
     throw new Error('没有找到有效的运输数据。请检查 CSV 文件中的 shipper_postal_code 和 shipto_postal_code 字段。');
@@ -118,10 +122,10 @@ export const processLogisticsData = async (rawData, progressCallback) => {
     }
   });
   
-  console.log(`📍 需要地理编码的唯一地址: ${uniqueAddresses.size} 个`);
+  console.log(` 需要地理编码的唯一地址: ${uniqueAddresses.size} 个`);
 
   // 3. 批量地理编码
-  console.log('🌍 开始地理编码...');
+  console.log(' 开始地理编码...');
   const addressList = Array.from(uniqueAddresses.values());
   const geocodeResults = await geocodingService.geocodeBatch(addressList, progressCallback);
   
@@ -138,7 +142,7 @@ export const processLogisticsData = async (rawData, progressCallback) => {
     }
   });
   
-  console.log(`✅ 地理编码完成: ${successCount}/${uniqueAddresses.size} 个地址成功`);
+  console.log(` 地理编码完成: ${successCount}/${uniqueAddresses.size} 个地址成功`);
   
   // 5. 生成最终数据
   const processedData = validData
@@ -202,7 +206,7 @@ export const processLogisticsData = async (rawData, progressCallback) => {
     geocodeSuccessRate: Math.round((successCount / uniqueAddresses.size) * 100)
   };
   
-  console.log('📊 处理统计:', stats);
+  console.log(' 处理统计:', stats);
   
   return { data: processedData, stats };
 };

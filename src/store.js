@@ -1,21 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
+
+// store.js 或在你的 App.js 中
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { taskMiddleware } from 'react-palm/tasks';
 import keplerGlReducer from '@kepler.gl/reducers';
 
-const store = configureStore({
-  reducer: {
-    keplerGl: keplerGlReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          '@@kepler.gl/REGISTER_ENTRY', 
-          '@@kepler.gl/REPLACE_DATA_IN_MAP',
-          '@@kepler.gl/UPDATE_VIS_DATA',
-          '@@kepler.gl/ADD_DATA_TO_MAP'
-        ],
-      },
-    }),
+// 创建 reducers
+const reducers = combineReducers({
+  keplerGl: keplerGlReducer
 });
+
+// 创建 store
+const store = createStore(
+  reducers, 
+  {}, 
+  applyMiddleware(taskMiddleware)
+);
 
 export default store;

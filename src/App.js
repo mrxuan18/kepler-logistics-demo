@@ -1,15 +1,13 @@
+// App.js
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store'; // 导入上面的 store
 import LogisticsMap from './LogisticsMap';
-import './App.css';
 
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
-        <LogisticsMap />
-      </div>
+      <LogisticsMap />
     </Provider>
   );
 }

@@ -1,7 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { taskMiddleware } from 'react-palm/tasks';
+import keplerGlReducer from '@kepler.gl/reducers';
+import LogisticsMap from './LogisticsMap';
 
-// 注意：不使用 React.StrictMode，避免 Kepler.gl 重复渲染
+// 创建 Redux store
+const reducers = combineReducers({
+  keplerGl: keplerGlReducer
+});
+
+const store = createStore(
+  reducers, 
+  {}, 
+  applyMiddleware(taskMiddleware)
+);
+
+// 渲染应用
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(
+  <Provider store={store}>
+    <LogisticsMap />
+  </Provider>
+);
